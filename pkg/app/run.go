@@ -42,6 +42,7 @@ func RunFunc(cCtx *cli.Context) error {
 		noStaking           = cCtx.Bool("no-staking")
 		noUpgrade           = cCtx.Bool("no-upgrade")
 		noCommission        = cCtx.Bool("no-commission")
+		noSlashing          = cCtx.Bool("no-slashing")
 		denom               = cCtx.String("denom")
 		denomExpon          = cCtx.Uint("denom-exponent")
 		startTimeout        = cCtx.Duration("start-timeout")
@@ -125,6 +126,16 @@ func RunFunc(cCtx *cli.Context) error {
 		commissionWatcher := watcher.NewCommissionsWatcher(trackedValidators, metrics, pool)
 		errg.Go(func() error {
 			return commissionWatcher.Start(ctx)
+		})
+	}
+
+	//
+	// Slashing watchers
+	//
+	if !noSlashing {
+		slashingWatcher := watcher.NewSlashingWatcher(metrics, pool)
+		errg.Go(func() error {
+			return slashingWatcher.Start(ctx)
 		})
 	}
 
