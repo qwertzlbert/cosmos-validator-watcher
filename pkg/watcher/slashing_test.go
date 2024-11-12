@@ -22,15 +22,15 @@ func TestSlashingWatcher(t *testing.T) {
 	t.Run("Handle Slashing Parameters", func(t *testing.T) {
 
 		minSignedPerWindow := cosmossdk_io_math.LegacyMustNewDecFromStr("0.1")
-		slash_fraction_double_sign := cosmossdk_io_math.LegacyMustNewDecFromStr("0.01")
-		slash_fraction_downtime := cosmossdk_io_math.LegacyMustNewDecFromStr("0.001")
+		slashFractionDoubleSign := cosmossdk_io_math.LegacyMustNewDecFromStr("0.01")
+		slashFractionDowntime := cosmossdk_io_math.LegacyMustNewDecFromStr("0.001")
 
 		params := slashing.Params{
 			SignedBlocksWindow:      int64(1000),
 			MinSignedPerWindow:      minSignedPerWindow,
 			DowntimeJailDuration:    time.Duration(10) * time.Second,
-			SlashFractionDoubleSign: slash_fraction_double_sign,
-			SlashFractionDowntime:   slash_fraction_downtime,
+			SlashFractionDoubleSign: slashFractionDoubleSign,
+			SlashFractionDowntime:   slashFractionDowntime,
 		}
 
 		watcher.handleSlashingParams(chainID, params)
