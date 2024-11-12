@@ -54,7 +54,6 @@ func (w *ValidatorsWatcher) Start(ctx context.Context) error {
 				Str("node", node.Redacted()).
 				Msg("failed to fetch signing infos")
 		}
-		log.Info().Msg("fetched staking validators and signing infos")
 		select {
 		case <-ctx.Done():
 			return nil
@@ -101,16 +100,11 @@ func (w *ValidatorsWatcher) fetchValidators(ctx context.Context, node *rpc.Node)
 
 func (w *ValidatorsWatcher) handleSigningInfos(chainID string, signingInfos []slashing.ValidatorSigningInfo) {
 	for _, tracked := range w.validators {
-		name := tracked.Name
 
 		for _, val := range signingInfos {
 
 			if tracked.ConsensusAddress == val.Address {
-				var (
-					missedBlocksWindow = val.MissedBlocksCounter
-				)
-				log.Info().Msgf("Tracked validator missed blocks: %d", missedBlocksWindow)
-				w.metrics.MissedBlocksWindow.WithLabelValues(chainID, tracked.Address, name).Set(float64(missedBlocksWindow))
+				w.metrics.MissedBlocksWindow.WithLabelValues(chainID, tracked.Address, tracked.Name).Set(float64(val.MissedBlocksCounter))
 				break
 			}
 		}

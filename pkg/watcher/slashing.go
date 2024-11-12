@@ -57,7 +57,7 @@ func (w *SlashingWatcher) fetchSlashingParameters(ctx context.Context, node *rpc
 	queryClient := slashing.NewQueryClient(clientCtx)
 	sigininParams, err := queryClient.Params(ctx, &slashing.QueryParamsRequest{})
 	if err != nil {
-		return fmt.Errorf("failed to get signing infos: %w", err)
+		return fmt.Errorf("failed to get slashing parameters: %w", err)
 	}
 
 	w.handleSlashingParams(node.ChainID(), sigininParams.Params)
